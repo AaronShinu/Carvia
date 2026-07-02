@@ -15,6 +15,8 @@ import environ
 from datetime import timedelta
 
 
+AUTH_USER_MODEL = 'accounts.User'  # Custom user model
+
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 env = environ.Env(
@@ -56,7 +58,11 @@ THIRD_PARTY_APPS = [
     'rest_framework_simplejwt.token_blacklist',
 ]
 
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS
+LOCAL_DEVELOPMENT_APPS = [
+    'apps.accounts',
+]
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_DEVELOPMENT_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -14,9 +14,9 @@ class UserAdmin(BaseUserAdmin):
         {
             'fields': (
                 'university',
-                'course',
+                'university_course',
                 'graduation_year',
-                'email_reminders_enabled',
+                'email_reminders_toggle_enabled',
             )
         }
     ),

@@ -61,6 +61,9 @@ THIRD_PARTY_APPS = [
 LOCAL_DEVELOPMENT_APPS = [
     'apps.accounts',
     'apps.applications',
+    'apps.documents',
+    'apps.calendar_application',
+    'apps.analytics',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_DEVELOPMENT_APPS
@@ -177,3 +180,6 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'

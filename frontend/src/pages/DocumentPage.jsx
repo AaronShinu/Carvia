@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { listDocuments, uploadDocument, deleteDocument } from '../api/documents'
 import { formatDate } from '../utils/formatDate'
 import './DocumentPage.css'
+import { requestCvFeedback } from '../api/documents'
 
 const DOCUMENT_TYPE_OPTIONS = [
     ['cv', 'Resume / CV'],
@@ -18,6 +19,7 @@ export default function DocumentsPage() {
     const [isUploading, setIsUploading] = useState(false)
     const [uploadForm, setUploadForm] = useState({ title: '', document_type: 'cv' })
     const fileInputRef = useRef(null)
+    const [feedbackRequests, setFeedbackRequests] = useState({})
 
     const loadDocuments = () => {
         listDocuments()
@@ -55,6 +57,16 @@ export default function DocumentsPage() {
             setError('Could not upload document.')
         } finally {
             setIsUploading(false)
+        }
+    }
+
+    const handleRequestFeedback = async (documentId) => {
+        setFeedbackRequests({ ...feedbackRequests, [documentId]: 'requesting' })
+        try {
+            await requestCvFeedback(documentId)
+            setFeedbackRequests({ ...feedbackRequests, [documentId]: 'pending' })
+        } catch (err) {
+            setFeedbackRequests({ ...feedbackRequests, [documentId]: 'error' })
         }
     }
 
@@ -149,6 +161,19 @@ export default function DocumentsPage() {
                             <a href={doc.file} target="_blank" rel="noreferrer" className="btn-secondary btn-small">
                                 View
                             </a>
+                            {doc.document_type === 'cv' && (
+                                feedbackRequests[doc.id] === 'pending' ? (
+                                    <span className="feedback-pending-badge">Feedback pending</span>
+                                ) : (
+                                    <button
+                                        className="btn-primary btn-small"
+                                        onClick={() => handleRequestFeedback(doc.id)}
+                                        disabled={feedbackRequests[doc.id] === 'requesting'}
+                                    >
+                                        {feedbackRequests[doc.id] === 'requesting' ? 'Requesting...' : 'Get AI Feedback'}
+                                    </button>
+                                )
+                            )}
                             <button className="btn-danger btn-small" onClick={() => handleDelete(doc.id)}>
                                 Delete
                             </button>

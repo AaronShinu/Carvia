@@ -77,3 +77,12 @@
     font-size: 0.8rem;
     color: var(--color-text-secondary);
 }
+
+.feedback-pending-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--radius-full);
+    background: var(--color-warning-light);
+    color: #92400e;
+}

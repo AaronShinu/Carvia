@@ -5,6 +5,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Application, InterviewStage, Tag
 from .serializers import ApplicationListSerializer, ApplicationDetailSerializer, InterviewStageSerializer, TagSerializer
+from apps.calendar_application.models import CalendarEvent
 
 
 # Create your views here.
@@ -29,10 +30,26 @@ class ApplicationViewSet(viewsets.ModelViewSet):
 class InterviewStageViewSet(viewsets.ModelViewSet):
     serializer_class = InterviewStageSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['application', 'completed', 'stage_phase']
 
     def get_queryset(self):
         return InterviewStage.objects.filter(application__user=self.request.user)
-    
+
+    def perform_create(self, serializer):
+        stage = serializer.save()
+
+        if stage.scheduled_date:
+            CalendarEvent.objects.create(
+                user = stage.application.user,
+                title = f"{stage.application.job_title} - {stage.get_stage_phase_display()}",
+                event_type = 'INTERVIEW',
+                start_time = stage.scheduled_date,
+                application = stage.application,
+                interview_stage = stage,
+                location = stage.link_or_location,
+            )
+
 class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
     permission_classes = [permissions.IsAuthenticated]

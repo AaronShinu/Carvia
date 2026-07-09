@@ -3,10 +3,12 @@
 }
 
 .event-section-title {
-    font-size: 1rem;
-    color: var(--color-text-secondary);
+    font-size: 0.8rem;
+    color: var(--color-text-tertiary);
     margin-bottom: var(--space-3);
-    font-weight: 600;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 
 .event-list {
@@ -23,55 +25,65 @@
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     padding: var(--space-4) var(--space-5);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.15s, transform 0.15s;
+}
+
+.event-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
 }
 
 .event-card-past {
-    opacity: 0.6;
+    opacity: 0.55;
+}
+
+.event-card-past:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
 }
 
 .event-type-marker {
     width: 4px;
-    height: 36px;
+    height: 40px;
     border-radius: var(--radius-full);
     flex-shrink: 0;
 }
 
-.event-type-marker.event-type-deadline,
-.event-type-badge.event-type-deadline {
-    background: var(--color-danger-light);
+.event-type-marker.event-type-deadline {
+    background: var(--color-danger);
 }
 
-.event-type-marker.event-type-interview,
-.event-type-badge.event-type-interview {
-    background: var(--color-warning-light);
+.event-type-marker.event-type-interview {
+    background: var(--color-warning);
 }
 
-.event-type-marker.event-type-assessment,
-.event-type-badge.event-type-assessment {
-    background: #dbeafe;
+.event-type-marker.event-type-assessment {
+    background: #3b82f6;
 }
 
-.event-type-marker.event-type-reminder,
-.event-type-badge.event-type-reminder {
-    background: var(--color-success-light);
+.event-type-marker.event-type-reminder {
+    background: var(--color-success);
 }
 
-.event-type-marker.event-type-other,
-.event-type-badge.event-type-other {
-    background: #f3f4f6;
+.event-type-marker.event-type-other {
+    background: var(--color-text-tertiary);
 }
 
 .event-info {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    gap: 0.15rem;
     min-width: 0;
 }
 
 .event-title {
     font-weight: 600;
     font-size: 0.95rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .event-time {
@@ -89,6 +101,30 @@
     font-weight: 600;
     padding: 0.3rem 0.75rem;
     border-radius: var(--radius-full);
-    color: #374151;
     flex-shrink: 0;
+}
+
+.event-type-badge.event-type-deadline {
+    background: var(--color-danger-light);
+    color: #991b1b;
+}
+
+.event-type-badge.event-type-interview {
+    background: var(--color-warning-light);
+    color: #92400e;
+}
+
+.event-type-badge.event-type-assessment {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.event-type-badge.event-type-reminder {
+    background: var(--color-success-light);
+    color: #065f46;
+}
+
+.event-type-badge.event-type-other {
+    background: #f3f4f6;
+    color: #6b7280;
 }

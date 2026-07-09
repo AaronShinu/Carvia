@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { listCalendarEvents, deleteCalendarEvent } from '../api/calendar'
 import { formatDateTime } from '../utils/formatDate'
 import './CalendarPage.css'
+import { motion } from 'framer-motion'
 
 export default function CalendarPage() {
     const [events, setEvents] = useState([])
@@ -67,8 +68,14 @@ export default function CalendarPage() {
                             <p className="empty-state-small">No upcoming events.</p>
                         ) : (
                             <div className="event-list">
-                                {upcoming.map((event) => (
-                                    <div key={event.id} className="event-card">
+                                {upcoming.map((event, index) => (
+                                    <motion.div
+                                        key={event.id}
+                                        className="event-card"
+                                        initial={{ opacity: 0, y: 8 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.3, delay: index * 0.05, ease: 'easeOut' }}
+                                    >
                                         <div className={`event-type-marker event-type-${event.event_type.toLowerCase()}`} />
                                         <div className="event-info">
                                             <span className="event-title">{event.title}</span>
@@ -81,7 +88,7 @@ export default function CalendarPage() {
                                         <button className="btn-danger btn-small" onClick={() => handleDelete(event.id)}>
                                             Delete
                                         </button>
-                                    </div>
+                                    </motion.div>
                                 ))}
                             </div>
                         )}
@@ -91,8 +98,14 @@ export default function CalendarPage() {
                         <div className="event-section">
                             <h2 className="event-section-title">Past</h2>
                             <div className="event-list">
-                                {past.map((event) => (
-                                    <div key={event.id} className="event-card event-card-past">
+                                {past.map((event, index) => (
+                                    <motion.div
+                                        key={event.id}
+                                        className="event-card event-card-past"
+                                        initial={{ opacity: 0, y: 8 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.3, delay: index * 0.05, ease: 'easeOut' }}
+                                    >
                                         <div className={`event-type-marker event-type-${event.event_type}`} />
                                         <div className="event-info">
                                             <span className="event-title">{event.title}</span>
@@ -104,7 +117,7 @@ export default function CalendarPage() {
                                         <button className="btn-danger btn-small" onClick={() => handleDelete(event.id)}>
                                             Delete
                                         </button>
-                                    </div>
+                                    </motion.div>
                                 ))}
                             </div>
                         </div>

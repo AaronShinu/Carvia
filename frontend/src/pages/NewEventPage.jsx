@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { createCalendarEvent } from '../api/calendar'
 import { listApplications } from '../api/applications'
 import './ApplicationForm.css'
+import { motion } from 'framer-motion'
 
 const EVENT_TYPE_OPTIONS = [
     ['DEADLINE', 'Application Deadline'],
@@ -62,7 +63,13 @@ export default function NewEventPage() {
     return (
         <div className="form-page">
             <h1>New Event</h1>
-            <form onSubmit={handleSubmit} className="application-form">
+            <motion.form
+                onSubmit={handleSubmit}
+                className="application-form"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
+            >
                 <div className="form-row">
                     <label>Title</label>
                     <input name="title" value={form.title} onChange={handleChange} required />
@@ -119,11 +126,17 @@ export default function NewEventPage() {
                     <button type="button" onClick={() => navigate('/calendar')} className="btn-secondary">
                         Cancel
                     </button>
-                    <button type="submit" disabled={isSubmitting} className="btn-primary">
+                    <motion.button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="btn-primary"
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
                         {isSubmitting ? 'Creating...' : 'Create Event'}
-                    </button>
+                    </motion.button>    
                 </div>
-            </form>
+            </motion.form>
         </div>
     )
 }

@@ -1,0 +1,69 @@
+.page-header {
+    margin-bottom: 1.5rem;
+}
+
+.applications-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.applications-table th,
+.applications-table td {
+    text-align: left;
+    padding: 0.85rem 1.25rem;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.9rem;
+}
+
+.applications-table th {
+    color: #6b7280;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.applications-table a {
+    color: #4f46e5;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.applications-table a:hover {
+    text-decoration: underline;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.status-applied { background: #dbeafe; color: #1e40af; }
+.status-interview { background: #fef3c7; color: #92400e; }
+.status-offer { background: #d1fae5; color: #065f46; }
+.status-rejected { background: #fee2e2; color: #991b1b; }
+.status-accepted { background: #d1fae5; color: #065f46; }
+.status-withdrawn { background: #f3f4f6; color: #6b7280; }
+
+.empty-state {
+    color: #6b7280;
+    padding: 2rem;
+    text-align: center;
+    background: white;
+    border-radius: 10px;
+}
+
+.error-text {
+    color: #b91c1c;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}

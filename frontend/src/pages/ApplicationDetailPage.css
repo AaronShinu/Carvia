@@ -147,3 +147,37 @@
 .status-select.status-rejected { background: #fee2e2; color: #991b1b; }
 .status-select.status-accepted { background: #d1fae5; color: #065f46; }
 .status-select.status-withdrawn { background: #f3f4f6; color: #6b7280; }
+
+.btn-small {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+.stage-outcome {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.outcome-btn {
+    border: 1px solid #d1d5db;
+    background: white;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+.outcome-btn.active-pass {
+    background: #d1fae5;
+    border-color: #10b981;
+    color: #065f46;
+    font-weight: 600;
+}
+
+.outcome-btn.active-fail {
+    background: #fee2e2;
+    border-color: #ef4444;
+    color: #991b1b;
+    font-weight: 600;
+}

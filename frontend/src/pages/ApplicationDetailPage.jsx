@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { getApplication, deleteApplication, createInterviewStage } from '../api/applications'
+import { getApplication, deleteApplication, createInterviewStage, updateInterviewStage } from '../api/applications'
 import './ApplicationDetailPage.css'
 import { formatDate, formatDateTime } from '../utils/formatDate'
 import { STATUS_OPTIONS } from '../utils/statusOptions'
@@ -87,6 +87,15 @@ export default function ApplicationDetailPage() {
         setError('Could not add interview stage.')
         } finally {
         setIsAddingStage(false)
+        }
+    }
+
+    const handleStageUpdate = async (stageId, updates) => {
+        try {
+            await updateInterviewStage(stageId, updates)
+            loadApplication()
+        } catch (err) {
+            setError('Could not update interview stage.')
         }
     }
 
@@ -187,19 +196,38 @@ export default function ApplicationDetailPage() {
 
             {application.interview_stages && application.interview_stages.length > 0 ? (
             <ul className="stage-list">
-                {application.interview_stages.map((stage) => (
+            {application.interview_stages.map((stage) => (
                 <li key={stage.id} className="stage-item">
-                    <span className="stage-type">{stage.stage_phase_display}</span>
-                    <span className="stage-date">
-                    {stage.scheduled_date
-                        ? formatDateTime(stage.scheduled_date)
-                        : 'Not scheduled'}
-                    </span>
-                    <span className={`stage-status ${stage.completed ? 'completed' : 'pending'}`}>
-                    {stage.completed ? 'Completed' : 'Pending'}
-                    </span>
+                <span className="stage-type">{stage.stage_phase_display}</span>
+                <span className="stage-date">
+                    {stage.scheduled_date ? formatDateTime(stage.scheduled_date) : 'Not scheduled'}
+                </span>
+
+                {!stage.completed ? (
+                    <button
+                    className="btn-secondary btn-small"
+                    onClick={() => handleStageUpdate(stage.id, { completed: true })}
+                    >
+                    Mark Complete
+                    </button>
+                ) : (
+                    <div className="stage-outcome">
+                    <button
+                        className={`outcome-btn ${stage.passed === true ? 'active-pass' : ''}`}
+                        onClick={() => handleStageUpdate(stage.id, { passed: true })}
+                    >
+                        Passed
+                    </button>
+                    <button
+                        className={`outcome-btn ${stage.passed === false ? 'active-fail' : ''}`}
+                        onClick={() => handleStageUpdate(stage.id, { passed: false })}
+                    >
+                        Failed
+                    </button>
+                    </div>
+                )}
                 </li>
-                ))}
+            ))}
             </ul>
             ) : (
             !showStageForm && <p className="empty-state-small">No interview stages yet.</p>

@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
+import './AuthPage.css'
 
 export default function LoginPage() {
-    const { login } = useAuth()
+  const { login } = useAuth()
     const navigate = useNavigate()
     const [form, setForm] = useState({ email: '', password: '' })
     const [error, setError] = useState('')
@@ -28,39 +30,84 @@ export default function LoginPage() {
     }
 
     return (
-        <div style={{ maxWidth: 400, margin: '80px auto', padding: '2rem' }}>
-        <h1 style={{ marginBottom: '1.5rem' }}>Welcome back to Carvia</h1>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div>
-            <label>Email</label>
-            <input
-                type="email"
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                required
-                style={{ display: 'block', width: '100%', padding: '0.5rem', marginTop: '0.25rem' }}
-            />
-            </div>
-            <div>
-            <label>Password</label>
-            <input
-                type="password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                required
-                style={{ display: 'block', width: '100%', padding: '0.5rem', marginTop: '0.25rem' }}
-            />
-            </div>
-            {error && <p style={{ color: '#dc2626' }}>{error}</p>}
-            <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Logging in...' : 'Log in'}
-            </button>
-        </form>
-        <p style={{ marginTop: '1rem' }}>
-            New to Carvia? <Link to="/register">Create an account</Link>
-        </p>
+        <div className="auth-page">
+        <div className="auth-brand-panel">
+            <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            >
+            <div className="auth-brand-logo">Carvia</div>
+            <h1 className="auth-brand-headline">
+                Your way to careers<br />and success.
+            </h1>
+            <p className="auth-brand-subtext">
+                Track every application, interview, and deadline in one place —
+                built for students who are done with spreadsheets.
+            </p>
+            </motion.div>
+        </div>
+
+        <div className="auth-form-panel">
+            <motion.div
+            className="auth-form-wrapper"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15, ease: 'easeOut' }}
+            >
+            <h2>Welcome back</h2>
+            <p className="auth-form-subtitle">Log in to continue tracking your applications.</p>
+
+            <form onSubmit={handleSubmit} className="auth-form">
+                <div className="form-row">
+                <label>Email</label>
+                <input
+                    type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    required
+                    autoFocus
+                />
+                </div>
+
+                <div className="form-row">
+                <label>Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    value={form.password}
+                    onChange={handleChange}
+                    required
+                />
+                </div>
+
+                {error && (
+                <motion.p
+                    className="error-text"
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                >
+                    {error}
+                </motion.p>
+                )}
+
+                <motion.button
+                type="submit"
+                className="btn-primary btn-full"
+                disabled={isSubmitting}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+                >
+                {isSubmitting ? 'Logging in...' : 'Log in'}
+                </motion.button>
+            </form>
+
+            <p className="auth-switch">
+                New to Carvia? <Link to="/register">Create an account</Link>
+            </p>
+            </motion.div>
+        </div>
         </div>
     )
-}
+    }

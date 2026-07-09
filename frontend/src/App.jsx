@@ -10,6 +10,7 @@ import NewApplicationPage from './pages/NewApplicationPage'
 import ApplicationDetailPage from './pages/ApplicationDetailPage'
 import CalendarPage from './pages/CalendarPage'
 import NewEventPage from './pages/NewEventPage'
+import DocumentPage from './pages/DocumentPage'
 
 export default function App() {
   const { isLoading } = useAuth()
@@ -36,6 +37,7 @@ export default function App() {
           <Route path="/applications/:id/edit" element={<NewApplicationPage />} />
           <Route path="/calendar/new" element={<NewEventPage />} />
           <Route path="/calendar" element={<CalendarPage />} />
+          <Route path="/documents" element={<DocumentPage />} />
         </Route>
       </Route>
 

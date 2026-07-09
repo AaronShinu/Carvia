@@ -127,3 +127,23 @@
     border-radius: 8px;
     margin-bottom: 1rem;
 }
+
+.status-select {
+    border: none;
+    border-radius: 999px;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.status-select.status-applied { background: #dbeafe; color: #1e40af; }
+.status-select.status-interview { background: #fef3c7; color: #92400e; }
+.status-select.status-online_assessment { background: #fef3c7; color: #92400e; }
+.status-select.status-hirevue { background: #fef3c7; color: #92400e; }
+.status-select.status-offer { background: #d1fae5; color: #065f46; }
+.status-select.status-rejected { background: #fee2e2; color: #991b1b; }
+.status-select.status-accepted { background: #d1fae5; color: #065f46; }
+.status-select.status-withdrawn { background: #f3f4f6; color: #6b7280; }

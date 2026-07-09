@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getApplication, deleteApplication, createInterviewStage } from '../api/applications'
 import './ApplicationDetailPage.css'
 import { formatDate, formatDateTime } from '../utils/formatDate'
+import { STATUS_OPTIONS } from '../utils/statusOptions'
+import { updateApplication } from '../api/applications'
+
 
 const STAGE_TYPE_OPTIONS = [
     ['phone_screen', 'Phone Screen'],
@@ -56,6 +59,16 @@ export default function ApplicationDetailPage() {
         setStageForm({ ...stageForm, [e.target.name]: e.target.value })
     }
 
+    const handleStatusChange = async (e) => {
+        const newStatus = e.target.value
+        try {
+            const { data } = await updateApplication(id, { job_status: newStatus })
+            setApplication(data)
+        } catch (err) {
+            setError('Could not update application status.')
+        }
+    }
+
     const handleAddStage = async (e) => {
         e.preventDefault()
         setIsAddingStage(true)
@@ -89,9 +102,18 @@ export default function ApplicationDetailPage() {
             <p className="detail-subtitle">{application.company_name}</p>
             </div>
             <div className="detail-actions">
-            <span className={`status-badge status-${application.job_status}`}>
-                {application.job_status_display}
-            </span>
+            <select
+                className={`status-select  status-${application.job_status}`}
+                value ={application.job_status}
+                onChange={handleStatusChange}
+            >   
+                {STATUS_OPTIONS.map(([value, label]) => (
+                    <option key={value} value={value}>
+                        {label}
+                    </option>
+                ))}
+            </select>
+            <Link to={`/applications/${id}/edit`} className="btn-secondary">Edit</Link>
             <button className="btn-danger" onClick={handleDelete}>Delete</button>
             </div>
         </div>

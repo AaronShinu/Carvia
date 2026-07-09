@@ -31,6 +31,7 @@ export default function App() {
           <Route path="/applications" element={<ApplicationsPage />} />
           <Route path="/applications/new" element={<NewApplicationPage />} />
           <Route path="/applications/:id" element={<ApplicationDetailPage />} />
+          <Route path="/applications/:id/edit" element={<NewApplicationPage />} />
         </Route>
       </Route>
 

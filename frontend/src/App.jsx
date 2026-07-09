@@ -8,6 +8,8 @@ import DashboardLayout from './components/DashboardLayout'
 import ProtectedRoute from './routes/ProtectedRoute'
 import NewApplicationPage from './pages/NewApplicationPage'
 import ApplicationDetailPage from './pages/ApplicationDetailPage'
+import CalendarPage from './pages/CalendarPage'
+import NewEventPage from './pages/NewEventPage'
 
 export default function App() {
   const { isLoading } = useAuth()
@@ -32,6 +34,8 @@ export default function App() {
           <Route path="/applications/new" element={<NewApplicationPage />} />
           <Route path="/applications/:id" element={<ApplicationDetailPage />} />
           <Route path="/applications/:id/edit" element={<NewApplicationPage />} />
+          <Route path="/calendar/new" element={<NewEventPage />} />
+          <Route path="/calendar" element={<CalendarPage />} />
         </Route>
       </Route>
 

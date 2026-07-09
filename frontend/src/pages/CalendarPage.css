@@ -1,0 +1,94 @@
+.event-section {
+    margin-bottom: var(--space-6);
+}
+
+.event-section-title {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-3);
+    font-weight: 600;
+}
+
+.event-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.event-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4) var(--space-5);
+}
+
+.event-card-past {
+    opacity: 0.6;
+}
+
+.event-type-marker {
+    width: 4px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+}
+
+.event-type-marker.event-type-deadline,
+.event-type-badge.event-type-deadline {
+    background: var(--color-danger-light);
+}
+
+.event-type-marker.event-type-interview,
+.event-type-badge.event-type-interview {
+    background: var(--color-warning-light);
+}
+
+.event-type-marker.event-type-assessment,
+.event-type-badge.event-type-assessment {
+    background: #dbeafe;
+}
+
+.event-type-marker.event-type-reminder,
+.event-type-badge.event-type-reminder {
+    background: var(--color-success-light);
+}
+
+.event-type-marker.event-type-other,
+.event-type-badge.event-type-other {
+    background: #f3f4f6;
+}
+
+.event-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 0;
+}
+
+.event-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.event-time {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.event-location {
+    font-size: 0.8rem;
+    color: var(--color-text-tertiary);
+}
+
+.event-type-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-full);
+    color: #374151;
+    flex-shrink: 0;
+}

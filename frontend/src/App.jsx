@@ -7,6 +7,7 @@ import ApplicationsPage from './pages/ApplicationsPage'
 import DashboardLayout from './components/DashboardLayout'
 import ProtectedRoute from './routes/ProtectedRoute'
 import NewApplicationPage from './pages/NewApplicationPage'
+import ApplicationDetailPage from './pages/ApplicationDetailPage'
 
 export default function App() {
   const { isLoading } = useAuth()
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/applications" element={<ApplicationsPage />} />
           <Route path="/applications/new" element={<NewApplicationPage />} />
+          <Route path="/applications/:id" element={<ApplicationDetailPage />} />
         </Route>
       </Route>
 

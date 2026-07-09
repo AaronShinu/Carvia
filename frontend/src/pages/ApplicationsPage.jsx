@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { listApplications } from "../api/applications";
 import './ApplicationsPage.css'
+import { formatDate } from "../utils/formatDate";
 
 export default function ApplicationsPage() {
     const [ applications, setApplications ] = useState([])
@@ -51,7 +52,7 @@ export default function ApplicationsPage() {
                                         {app.job_status_display}
                                     </span>
                                 </td>
-                                <td>{app.application_deadline || '-'}</td>
+                                <td>{formatDate(app.application_deadline) || '—'}</td>
                             </tr>
                         ))}
                     </tbody>

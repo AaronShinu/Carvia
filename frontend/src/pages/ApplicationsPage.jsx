@@ -24,6 +24,7 @@ export default function ApplicationsPage() {
         <div>
             <div className="page-header">
                 <h1>Applications</h1>
+                <Link to="/applications/new" className="btn-primary">New Application</Link>
             </div>
 
             {applications.length === 0 ? (

@@ -6,6 +6,7 @@ import DashboardPage from './pages/DashboardPage'
 import ApplicationsPage from './pages/ApplicationsPage'
 import DashboardLayout from './components/DashboardLayout'
 import ProtectedRoute from './routes/ProtectedRoute'
+import NewApplicationPage from './pages/NewApplicationPage'
 
 export default function App() {
   const { isLoading } = useAuth()
@@ -27,6 +28,7 @@ export default function App() {
         <Route element={<DashboardLayout />}>
           <Route path="/" element={<DashboardPage />} />
           <Route path="/applications" element={<ApplicationsPage />} />
+          <Route path="/applications/new" element={<NewApplicationPage />} />
         </Route>
       </Route>
 

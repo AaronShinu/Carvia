@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { createApplication, getApplication, updateApplication } from '../api/applications'
 import './ApplicationForm.css'
 import { motion } from 'framer-motion'
+import { parseAPIError } from '../utils/parseAPIError'
 
 const STATUS_OPTIONS = [
     ['bookmarked', 'Bookmarked'],
@@ -89,7 +90,7 @@ export default function NewApplicationPage() {
                 navigate('/applications')
             }
         } catch (err) {
-            setError('Could not save application. Check the fields and try again.')
+            setError(parseAPIError(err, "Couldn't save application. Please check your input and try again."))
         } finally {
             setIsSubmitting(false)
         }

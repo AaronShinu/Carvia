@@ -4,6 +4,7 @@ import { listDocuments, uploadDocument, deleteDocument } from '../api/documents'
 import { formatDate } from '../utils/formatDate'
 import './DocumentPage.css'
 import { requestCvFeedback } from '../api/documents'
+import { parseAPIError } from '../utils/parseAPIError'
 
 const DOCUMENT_TYPE_OPTIONS = [
     ['cv', 'Resume / CV'],
@@ -54,7 +55,7 @@ export default function DocumentsPage() {
             if (fileInputRef.current) fileInputRef.current.value = ''
             loadDocuments()
         } catch (err) {
-            setError('Could not upload document.')
+            setError(parseAPIError(err, "Couldn't upload document. Please check your input and try again."))
         } finally {
             setIsUploading(false)
         }

@@ -4,6 +4,7 @@ import { createCalendarEvent } from '../api/calendar'
 import { listApplications } from '../api/applications'
 import './ApplicationForm.css'
 import { motion } from 'framer-motion'
+import { parseAPIError } from '../utils/parseAPIError'
 
 const EVENT_TYPE_OPTIONS = [
     ['DEADLINE', 'Application Deadline'],
@@ -54,7 +55,7 @@ export default function NewEventPage() {
             await createCalendarEvent(payload)
             navigate('/calendar')
         } catch (err) {
-            setError('Could not create event. Check the fields and try again.')
+            setError(parseAPIError(err, "Couldn't create event. Please check your input and try again."))
         } finally {
             setIsSubmitting(false)
         }

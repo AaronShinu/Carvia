@@ -9,6 +9,7 @@ const FEATURES = [
         description: 'Track company, role, status, deadline and notes for every job you apply to — no more scrolling through spreadsheet columns.',
         accent: '#4f46e5',
         accentLight: '#eef2ff',
+        mockup: 'applications',
     },
     {
         tag: 'Interview Stages',
@@ -16,6 +17,7 @@ const FEATURES = [
         description: 'Log phone screens, assessments, and final rounds against each application, and mark them passed, failed, or pending as you go.',
         accent: '#f59e0b',
         accentLight: '#fffbeb',
+        mockup: 'stages',
     },
     {
         tag: 'Calendar',
@@ -23,6 +25,7 @@ const FEATURES = [
         description: 'Scheduling an interview stage instantly creates a matching calendar event — deadlines and interviews live in one place.',
         accent: '#10b981',
         accentLight: '#ecfdf5',
+        mockup: 'calendar',
     },
     {
         tag: 'AI CV Feedback',
@@ -30,8 +33,95 @@ const FEATURES = [
         description: 'Upload your CV and get instant, structured feedback — strengths, improvement areas, and keyword suggestions powered by AI.',
         accent: '#ec4899',
         accentLight: '#fdf2f8',
+        mockup: 'feedback',
     },
 ]
+
+function ApplicationsMockup() {
+    const rows = [
+        { company: 'Meta', role: 'Software Engineer', status: 'Offer', badge: 'success' },
+        { company: 'Goldman Sachs', role: 'Tech Analyst', status: 'Interview', badge: 'warning' },
+        { company: 'Stripe', role: 'Product Manager', status: 'Applied', badge: 'info' },
+    ]
+    return (
+        <div className="mockup-window">
+            <div className="mockup-titlebar" />
+            {rows.map((r) => (
+                <div key={r.company} className="mockup-table-row">
+                    <span className="mockup-cell mockup-cell-strong">{r.company}</span>
+                    <span className="mockup-cell mockup-cell-muted">{r.role}</span>
+                    <span className={`mockup-badge mockup-badge-${r.badge}`}>{r.status}</span>
+                </div>
+            ))}
+        </div>
+    )
+}
+
+function StagesMockup() {
+    const stages = [
+        { name: 'Phone Screen', state: 'Passed', badge: 'success' },
+        { name: 'Technical Interview', state: 'Passed', badge: 'success' },
+        { name: 'Final Round', state: 'Pending', badge: 'warning' },
+    ]
+    return (
+        <div className="mockup-window">
+            <div className="mockup-titlebar" />
+            {stages.map((s) => (
+                <div key={s.name} className="mockup-stage-row">
+                    <div className="mockup-stage-dot" />
+                    <span className="mockup-cell mockup-cell-strong">{s.name}</span>
+                    <span className={`mockup-badge mockup-badge-${s.badge}`}>{s.state}</span>
+                </div>
+            ))}
+        </div>
+    )
+}
+
+function CalendarMockup() {
+    const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+    const highlighted = [3, 12]
+    return (
+        <div className="mockup-window">
+            <div className="mockup-titlebar" />
+            <div className="mockup-calendar-grid">
+                {days.map((d, i) => <span key={i} className="mockup-calendar-head">{d}</span>)}
+                {Array.from({ length: 14 }).map((_, i) => (
+                    <span
+                        key={i}
+                        className={`mockup-calendar-cell ${highlighted.includes(i) ? 'mockup-calendar-cell-active' : ''}`}
+                    >
+                        {i + 1}
+                    </span>
+                ))}
+            </div>
+        </div>
+    )
+}
+
+function FeedbackMockup() {
+    return (
+        <div className="mockup-window">
+            <div className="mockup-titlebar" />
+            <div className="mockup-feedback-score">
+                <div className="mockup-score-ring">
+                    <span>87</span>
+                </div>
+                <div className="mockup-feedback-list">
+                    <div className="mockup-feedback-item">✓ Strong action verbs</div>
+                    <div className="mockup-feedback-item">✓ Clear formatting</div>
+                    <div className="mockup-feedback-item mockup-feedback-item-muted">△ Add metrics to bullet 3</div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+const MOCKUPS = {
+    applications: ApplicationsMockup,
+    stages: StagesMockup,
+    calendar: CalendarMockup,
+    feedback: FeedbackMockup,
+}
 
 function FeatureRow({ feature, index }) {
     const ref = useRef(null)
@@ -58,6 +148,8 @@ function FeatureRow({ feature, index }) {
         isEven ? [60, 0, 0, 30] : [-60, 0, 0, -30]
     )
 
+    const Mockup = MOCKUPS[feature.mockup]
+
     return (
         <div ref={ref} className="feature-row-wrapper">
             <div
@@ -80,15 +172,7 @@ function FeatureRow({ feature, index }) {
                 </motion.div>
 
                 <motion.div className="feature-visual" style={{ x: visualX }}>
-                    <div
-                        className="feature-visual-card"
-                        style={{ background: feature.accentLight, borderColor: feature.accent }}
-                    >
-                        <div className="feature-visual-dot" style={{ background: feature.accent }} />
-                        <div className="feature-visual-bar" style={{ background: feature.accent, width: '70%' }} />
-                        <div className="feature-visual-bar" style={{ background: feature.accent, width: '45%', opacity: 0.5 }} />
-                        <div className="feature-visual-bar" style={{ background: feature.accent, width: '60%', opacity: 0.3 }} />
-                    </div>
+                    <Mockup />
                 </motion.div>
             </motion.div>
         </div>

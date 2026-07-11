@@ -22,7 +22,7 @@ export default function LoginPage() {
         setIsSubmitting(true)
         try {
             await login(form.email, form.password)
-            navigate('/')
+            navigate('/app')
         } catch (err) {
             setError(parseAPIError(err, "Couldn't log in. Please check your credentials and try again."))
         } finally {

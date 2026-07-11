@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import './DashboardLayout.css'
 
 const NAV_ITEMS = [
-    { to: '/', label: 'Dashboard', end: true },
+    { to: '/app', label: 'Dashboard', end: true },
     { to: '/applications', label: 'Applications' },
     { to: '/calendar', label: 'Calendar' },
     { to: '/documents', label: 'Documents' },

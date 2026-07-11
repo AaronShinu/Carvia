@@ -11,6 +11,8 @@ import ApplicationDetailPage from './pages/ApplicationDetailPage'
 import CalendarPage from './pages/CalendarPage'
 import NewEventPage from './pages/NewEventPage'
 import DocumentPage from './pages/DocumentPage'
+import PublicRoute from './routes/PublicRoute'
+import LandingPage from './pages/LandingPage'
 
 export default function App() {
   const { isLoading } = useAuth()
@@ -25,12 +27,16 @@ export default function App() {
 
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+
+      <Route element={<PublicRoute />}>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+      </Route>
 
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
-          <Route path="/" element={<DashboardPage />} />
+          <Route path="/app" element={<DashboardPage />} />
           <Route path="/applications" element={<ApplicationsPage />} />
           <Route path="/applications/new" element={<NewApplicationPage />} />
           <Route path="/applications/:id" element={<ApplicationDetailPage />} />

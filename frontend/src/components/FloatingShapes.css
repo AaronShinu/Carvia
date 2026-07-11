@@ -1,0 +1,36 @@
+.floating-shapes {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    perspective: 1000px;
+    z-index: 0;
+}
+
+.floating-shape {
+    position: absolute;
+    border: 1px solid;
+    transform-style: preserve-3d;
+}
+
+.floating-shape-circle {
+    border-radius: 50%;
+}
+
+.floating-shape-square {
+    border-radius: 16px;
+}
+
+.floating-shape-triangle {
+    border: none;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.floating-shape-triangle-inner {
+    width: 0;
+    height: 0;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    border-bottom: 52px solid;
+}

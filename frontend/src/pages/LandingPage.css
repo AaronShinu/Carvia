@@ -1,0 +1,224 @@
+.landing {
+    background: var(--color-surface);
+}
+
+.landing-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-5) var(--space-8);
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.landing-logo {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--color-text-primary);
+}
+
+.landing-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+}
+
+.landing-nav-link {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.landing-nav-link:hover {
+    color: var(--color-text-primary);
+}
+
+.hero {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-8) var(--space-8);
+    min-height: 80vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-content {
+    flex: 1;
+    max-width: 560px;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-eyebrow {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    background: var(--color-primary-light);
+    padding: 0.4rem 0.9rem;
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-5);
+}
+
+.hero-headline {
+    font-size: 3.5rem;
+    line-height: 1.08;
+    margin-bottom: var(--space-5);
+    color: var(--color-text-primary);
+}
+
+.hero-subtext {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-6);
+}
+
+.hero-actions {
+    display: flex;
+    gap: var(--space-4);
+}
+
+.btn-large {
+    padding: 0.85rem 1.75rem;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.hero-visual {
+    flex: 1;
+    position: relative;
+    height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1200px;
+    z-index: 1;
+}
+.hero-visual-glow {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(79, 70, 229, 0.15) 0%, rgba(79, 70, 229, 0) 70%);
+    border-radius: 50%;
+}
+
+.hero-visual-card {
+    position: absolute;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-4) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    width: 220px;
+}
+
+.hero-card-1 {
+    top: 20px;
+    right: 40px;
+    transform: rotate(-3deg);
+    z-index: 3;
+}
+
+.hero-card-2 {
+    top: 160px;
+    right: 160px;
+    transform: rotate(2deg);
+    z-index: 2;
+}
+
+.hero-card-3 {
+    top: 300px;
+    right: 20px;
+    transform: rotate(-1deg);
+    z-index: 1;
+}
+
+.mini-badge {
+    display: inline-block;
+    width: fit-content;
+    padding: 0.25rem 0.7rem;
+    border-radius: var(--radius-full);
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.mini-badge-success {
+    background: var(--color-success-light);
+    color: #065f46;
+}
+
+.mini-badge-warning {
+    background: var(--color-warning-light);
+    color: #92400e;
+}
+
+.mini-badge-info {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.mini-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.mini-subtitle {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+}
+
+@media (max-width: 900px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        min-height: auto;
+        padding-top: var(--space-6);
+    }
+
+    .hero-content {
+        max-width: 100%;
+    }
+
+    .hero-actions {
+        justify-content: center;
+    }
+
+    .hero-visual {
+        display: none;
+    }
+}
+
+.problem-section {
+    background: var(--color-bg);
+    padding: var(--space-8) var(--space-8);
+    display: flex;
+    justify-content: center;
+}
+
+.problem-content {
+    max-width: 700px;
+    text-align: center;
+}
+
+.problem-headline {
+    font-size: 2.25rem;
+    line-height: 1.25;
+    margin-bottom: var(--space-5);
+    color: var(--color-text-primary);
+}
+
+.problem-subtext {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+}

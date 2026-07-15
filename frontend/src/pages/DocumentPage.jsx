@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { listDocuments, uploadDocument, deleteDocument } from '../api/documents'
+import { listDocuments, uploadDocument, deleteDocument, requestCvFeedback, getCvFeedback } from '../api/documents'
 import { formatDate } from '../utils/formatDate'
 import './DocumentPage.css'
-import { requestCvFeedback } from '../api/documents'
-import { parseAPIError } from '../utils/parseAPIError'
 
 const DOCUMENT_TYPE_OPTIONS = [
     ['cv', 'Resume / CV'],
@@ -20,7 +18,9 @@ export default function DocumentsPage() {
     const [isUploading, setIsUploading] = useState(false)
     const [uploadForm, setUploadForm] = useState({ title: '', document_type: 'cv' })
     const fileInputRef = useRef(null)
-    const [feedbackRequests, setFeedbackRequests] = useState({})
+
+    const [feedbackByDoc, setFeedbackByDoc] = useState({})
+    const pollingRefs = useRef({})
 
     const loadDocuments = () => {
         listDocuments()
@@ -31,6 +31,9 @@ export default function DocumentsPage() {
 
     useEffect(() => {
         loadDocuments()
+        return () => {
+            Object.values(pollingRefs.current).forEach(clearInterval)
+        }
     }, [])
 
     const handleUpload = async (e) => {
@@ -55,19 +58,9 @@ export default function DocumentsPage() {
             if (fileInputRef.current) fileInputRef.current.value = ''
             loadDocuments()
         } catch (err) {
-            setError(parseAPIError(err, "Couldn't upload document. Please check your input and try again."))
+            setError('Could not upload document.')
         } finally {
             setIsUploading(false)
-        }
-    }
-
-    const handleRequestFeedback = async (documentId) => {
-        setFeedbackRequests({ ...feedbackRequests, [documentId]: 'requesting' })
-        try {
-            await requestCvFeedback(documentId)
-            setFeedbackRequests({ ...feedbackRequests, [documentId]: 'pending' })
-        } catch (err) {
-            setFeedbackRequests({ ...feedbackRequests, [documentId]: 'error' })
         }
     }
 
@@ -78,6 +71,39 @@ export default function DocumentsPage() {
             loadDocuments()
         } catch (err) {
             setError('Could not delete document.')
+        }
+    }
+
+    const pollFeedback = (documentId, feedbackId) => {
+        if (pollingRefs.current[documentId]) {
+            clearInterval(pollingRefs.current[documentId])
+        }
+
+        const interval = setInterval(async () => {
+            try {
+                const { data } = await getCvFeedback(feedbackId)
+                setFeedbackByDoc((prev) => ({ ...prev, [documentId]: data }))
+
+                if (data.feedback_status === 'completed' || data.feedback_status === 'failed') {
+                    clearInterval(pollingRefs.current[documentId])
+                    delete pollingRefs.current[documentId]
+                }
+            } catch (err) {
+                clearInterval(pollingRefs.current[documentId])
+                delete pollingRefs.current[documentId]
+            }
+        }, 3000)
+
+        pollingRefs.current[documentId] = interval
+    }
+
+    const handleRequestFeedback = async (documentId) => {
+        try {
+            const { data } = await requestCvFeedback(documentId)
+            setFeedbackByDoc((prev) => ({ ...prev, [documentId]: data }))
+            pollFeedback(documentId, data.id)
+        } catch (err) {
+            setError('Could not request AI feedback.')
         }
     }
 
@@ -106,7 +132,7 @@ export default function DocumentsPage() {
                     <div className="form-row">
                         <label>Title</label>
                         <input
-                            placeholder="e.g. Tech CV "
+                            placeholder="e.g. Tech CV v2"
                             value={uploadForm.title}
                             onChange={(e) => setUploadForm({ ...uploadForm, title: e.target.value })}
                         />
@@ -124,7 +150,7 @@ export default function DocumentsPage() {
                     </div>
                     <div className="form-row">
                         <label>File</label>
-                        <input type="file" ref={fileInputRef} accept=".pdf,.doc,.docx" />
+                        <input type="file" ref={fileInputRef} accept=".pdf,.docx" />
                     </div>
                 </div>
                 {error && <p className="error-text">{error}</p>}
@@ -143,43 +169,103 @@ export default function DocumentsPage() {
                 <p className="empty-state-small">No documents uploaded yet.</p>
             ) : (
                 <div className="document-list">
-                    {documents.map((doc, index) => (
-                        <motion.div
-                            key={doc.id}
-                            className="document-card"
-                            initial={{ opacity: 0, y: 8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.3, delay: index * 0.05, ease: 'easeOut' }}
-                        >
-                            <div className="document-icon">📄</div>
-                            <div className="document-info">
-                                <span className="document-title">{doc.title}</span>
-                                <span className="document-meta">
-                                    {doc.document_type_display} · {formatDate(doc.updated_at)}
-                                    {doc.file_size ? ` · ${Math.round(doc.file_size / 1024)} KB` : ''}
-                                </span>
-                            </div>
-                            <a href={doc.file} target="_blank" rel="noreferrer" className="btn-secondary btn-small">
-                                View
-                            </a>
-                            {doc.document_type === 'cv' && (
-                                feedbackRequests[doc.id] === 'pending' ? (
-                                    <span className="feedback-pending-badge">Feedback pending</span>
-                                ) : (
-                                    <button
-                                        className="btn-primary btn-small"
-                                        onClick={() => handleRequestFeedback(doc.id)}
-                                        disabled={feedbackRequests[doc.id] === 'requesting'}
-                                    >
-                                        {feedbackRequests[doc.id] === 'requesting' ? 'Requesting...' : 'Get AI Feedback'}
+                    {documents.map((doc, index) => {
+                        const feedback = feedbackByDoc[doc.id]
+                        return (
+                            <motion.div
+                                key={doc.id}
+                                className="document-card-wrapper"
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: index * 0.05, ease: 'easeOut' }}
+                            >
+                                <div className="document-card">
+                                    <div className="document-icon">📄</div>
+                                    <div className="document-info">
+                                        <span className="document-title">{doc.title}</span>
+                                        <span className="document-meta">
+                                            {doc.document_type_display} · {formatDate(doc.updated_at)}
+                                            {doc.file_size ? ` · ${Math.round(doc.file_size / 1024)} KB` : ''}
+                                        </span>
+                                    </div>
+                                    <a href={doc.file} target="_blank" rel="noreferrer" className="btn-secondary btn-small">
+                                        View
+                                    </a>
+                                    {doc.document_type === 'cv' && (
+                                        !feedback || feedback.feedback_status === 'failed' ? (
+                                            <button
+                                                className="btn-primary btn-small"
+                                                onClick={() => handleRequestFeedback(doc.id)}
+                                            >
+                                                {feedback?.feedback_status === 'failed' ? 'Retry Feedback' : 'Get AI Feedback'}
+                                            </button>
+                                        ) : feedback.feedback_status === 'completed' ? (
+                                            <span className="feedback-score-badge">Score: {feedback.feedback_score}</span>
+                                        ) : (
+                                            <span className="feedback-pending-badge">
+                                                {feedback.feedback_status === 'processing' ? 'Analysing...' : 'Feedback pending'}
+                                            </span>
+                                        )
+                                    )}
+                                    <button className="btn-danger btn-small" onClick={() => handleDelete(doc.id)}>
+                                        Delete
                                     </button>
-                                )
-                            )}
-                            <button className="btn-danger btn-small" onClick={() => handleDelete(doc.id)}>
-                                Delete
-                            </button>
-                        </motion.div>
-                    ))}
+                                </div>
+
+                                {feedback?.feedback_status === 'failed' && (
+                                    <div className="feedback-error-panel">
+                                        Feedback failed: {feedback.error_message || 'Unknown error.'}
+                                    </div>
+                                )}
+
+                                {feedback?.feedback_status === 'completed' && (
+                                    <motion.div
+                                        className="feedback-results-panel"
+                                        initial={{ opacity: 0, y: -8 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.35, ease: 'easeOut' }}
+                                    >
+                                        <div className="feedback-results-header">
+                                            <div className="feedback-score-ring">
+                                                <span>{feedback.feedback_score}</span>
+                                            </div>
+                                            <p className="feedback-summary">{feedback.feedback_summary}</p>
+                                        </div>
+
+                                        <div className="feedback-results-grid">
+                                            <div className="feedback-column">
+                                                <h4 className="feedback-column-title feedback-column-title-good">Strengths</h4>
+                                                <ul>
+                                                    {feedback.cv_strengths.map((s, i) => <li key={i}>{s}</li>)}
+                                                </ul>
+                                            </div>
+                                            <div className="feedback-column">
+                                                <h4 className="feedback-column-title feedback-column-title-warn">Improvement Areas</h4>
+                                                {feedback.cv_improvements.length === 0 ? (
+                                                    <p className="feedback-empty-note">No major improvements suggested.</p>
+                                                ) : (
+                                                    <ul>
+                                                        {feedback.cv_improvements.map((s, i) => <li key={i}>{s}</li>)}
+                                                    </ul>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {feedback.keyword_suggestions?.length > 0 && (
+                                            <div className="feedback-keywords">
+                                                <h4 className="feedback-column-title">Suggested Keywords</h4>
+                                                <div className="feedback-keyword-tags">
+                                                    {feedback.keyword_suggestions.map((k, i) => (
+                                                        <span key={i} className="feedback-keyword-tag">{k}</span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </motion.div>
+                                )}
+                            </motion.div>
+                        )
+                    })}
                 </div>
             )}
         </div>

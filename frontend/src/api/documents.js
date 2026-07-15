@@ -12,3 +12,5 @@ export const requestCvFeedback = (documentId) =>
     api.post(`/documents/${documentId}/request-cv-feedback/`)
 
 export const listCvFeedback = () => api.get('/documents/feedback-cv/')
+
+export const getCvFeedback = (feedbackId) => api.get(`/documents/feedback-cv/${feedbackId}/`)

@@ -78,7 +78,7 @@ def generate_cv_feedback(self, feedback_id):
         feedback.feedback_score = parsed.get('overall_score')
         feedback.feedback_summary = parsed.get('summary', '')
         feedback.cv_strengths = parsed.get('strengths', [])
-        feedback.cv_improvement = parsed.get('improvement_areas', [])
+        feedback.cv_improvements = parsed.get('improvement_areas', [])
         feedback.keyword_suggestions = parsed.get('keyword_suggestions', [])
         feedback.feedback_status = FeedbackStatus.COMPLETED
         feedback.save()

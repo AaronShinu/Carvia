@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Globe from 'react-globe.gl'
+import * as THREE from 'three'
 
 const HIRING_HUBS = [
     { name: 'London', lat: 51.5074, lng: -0.1278, size: 0.6 },
@@ -10,18 +11,22 @@ const HIRING_HUBS = [
     { name: 'Toronto', lat: 43.6532, lng: -79.3832, size: 0.5 },
     { name: 'Sydney', lat: -33.8688, lng: 151.2093, size: 0.5 },
     { name: 'Dubai', lat: 25.2048, lng: 55.2708, size: 0.4 },
-    { name: "Mumbai", lat: 19.076, lng: 72.8777, size: 0.4 },
-    { name: "São Paulo", lat: -23.5505, lng: -46.6333, size: 0.4 },
-    { name: "Tokyo", lat: 35.6895, lng: 139.6917, size: 0.4 },
-    { name: "Seoul", lat: 37.5665, lng: 126.978, size: 0.4 },
-    { name: "Paris", lat: 48.8566, lng: 2.3522, size: 0.4 },
+    { name: 'Mumbai', lat: 19.076, lng: 72.8777, size: 0.4 },
+    { name: 'São Paulo', lat: -23.5505, lng: -46.6333, size: 0.4 },
+    { name: 'Tokyo', lat: 35.6895, lng: 139.6917, size: 0.4 },
+    { name: 'Seoul', lat: 37.5665, lng: 126.978, size: 0.4 },
+    { name: 'Paris', lat: 48.8566, lng: 2.3522, size: 0.4 },
 ]
-
 
 export default function CompanyGlobe() {
     const globeRef = useRef()
     const [dimensions] = useState({ width: 480, height: 480 })
     const [countries, setCountries] = useState([])
+
+    const globeMaterial = useMemo(
+        () => new THREE.MeshBasicMaterial({ color: '#e0e7ff', transparent: true, opacity: 0 }),
+        []
+    )
 
     useEffect(() => {
         fetch('https://raw.githubusercontent.com/vasturiano/react-globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson')
@@ -49,7 +54,7 @@ export default function CompanyGlobe() {
             showAtmosphere={true}
             atmosphereColor="#4f46e5"
             atmosphereAltitude={0.15}
-            globeMaterial={{ color: '#e0e7ff', transparent: true, opacity: 0 }}
+            globeMaterial={globeMaterial}
             hexPolygonsData={countries}
             hexPolygonResolution={3}
             hexPolygonMargin={0.4}

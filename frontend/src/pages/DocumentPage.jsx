@@ -109,6 +109,13 @@ export default function DocumentsPage() {
 
     if (isLoading) return <p className="loading-text">Loading documents...</p>
 
+    function getScoreColor(score) {
+        if (score >= 80) return '#10b981'
+        if (score >= 60) return '#f59e0b'
+        if (score >= 40) return '#f97316'
+        return '#ef4444'
+    }
+
     return (
         <div>
             <div className="page-header">
@@ -225,11 +232,14 @@ export default function DocumentsPage() {
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.35, ease: 'easeOut' }}
                                     >
-                                        <div className="feedback-results-header">
-                                            <div className="feedback-score-ring">
-                                                <span>{feedback.feedback_score}</span>
-                                            </div>
-                                            <p className="feedback-summary">{feedback.feedback_summary}</p>
+                                        <div
+                                            className="feedback-score-ring"
+                                            style={{
+                                                background: `conic-gradient(${getScoreColor(feedback.feedback_score)} ${feedback.feedback_score * 3.6}deg, var(--color-primary-light) 0deg)`,
+                                            }}
+                                        >
+                                            <span>{feedback.feedback_score}</span>
+                                            <br></br>
                                         </div>
 
                                         <div className="feedback-results-grid">

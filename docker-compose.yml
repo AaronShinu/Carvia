@@ -1,0 +1,62 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: carvia-postgres
+    environment:
+      POSTGRES_DB: carvia
+      POSTGRES_USER: carvia
+      POSTGRES_PASSWORD: carvia_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U carvia" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis
+    container_name: carvia-redis
+    ports:
+      - "6379:6379"
+
+  backend:
+    build: ./backend
+    container_name: carvia-django
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    environment:
+      DB_HOST: postgres
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  celery_worker:
+    build: ./backend
+    container_name: carvia-celery
+    command: celery -A config worker -l info --pool=solo
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    environment:
+      DB_HOST: postgres
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+volumes:
+  postgres_data:

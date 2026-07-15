@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from .models import Document, FeedbackCV, FeedbackStatus
 from .serializers import DocumentSerializer, FeedbackCVSerializer
+from .tasks import generate_cv_feedback
 
 # Create your views here.
 class DocumentViewSet(viewsets.ModelViewSet):
@@ -21,12 +22,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
     def request_cv_feedback(self, request, pk=None):
         document = self.get_object()
         feedback_cv = FeedbackCV.objects.create(document=document, feedback_status=FeedbackStatus.PENDING, user=self.request.user)
-
-        """
-        - Need to trigger Celery task for AI integration to process CV and generate feedback. 
-        - from .tasks import generate_feedback_cv
-        - generate_feedback_cv.delay(feedback_cv.id) 
-        """
+        generate_cv_feedback.delay(str(feedback_cv.id))
         serializer = FeedbackCVSerializer(feedback_cv)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import environ
 from datetime import timedelta
+import dj_database_url
 
 
 AUTH_USER_MODEL = 'accounts.User'  # Custom user model
@@ -104,14 +105,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DB_NAME', default='carvia'),
-        'USER': env('DB_USER', default='carvia'),
-        'PASSWORD': env('DB_PASSWORD', default=''),
-        'HOST': env('DB_HOST', default='localhost'),
-        'PORT': env('DB_PORT', default='5432'),
-    }
+    'default': dj_database_url.config(
+        default=env('DATABASE_URL', default='postgres://carvia:carvia_dev_password@localhost:5432/carvia'),
+        conn_max_age=600,
+    )
 }
 
 

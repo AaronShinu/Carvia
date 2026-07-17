@@ -16,7 +16,8 @@
     "react-dom": "^19.2.7",
     "react-globe.gl": "^2.38.0",
     "react-router-dom": "^7.18.1",
-    "recharts": "^3.9.2"
+    "recharts": "^3.9.2",
+    "serve": "^14.2.6"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

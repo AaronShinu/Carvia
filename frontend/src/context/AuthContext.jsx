@@ -19,12 +19,15 @@ export function AuthProvider({ children }) {
                 localStorage.removeItem('carvia_access_token')
                 localStorage.removeItem('carvia_refresh_token')
                 setUser(null)
-        })
-        .finally(() => setIsLoading(false))
+            })
+            .finally(() => setIsLoading(false))
     }, [])
 
     const login = async (email, password) => {
         const { data } = await loginUser({ email, password })
+        if (!data.access || !data.refresh) {
+            throw new Error('Login response missing tokens.')
+        }
         localStorage.setItem('carvia_access_token', data.access)
         localStorage.setItem('carvia_refresh_token', data.refresh)
         const { data: profile } = await fetchMe()
@@ -35,7 +38,7 @@ export function AuthProvider({ children }) {
     const logout = async () => {
         const refresh = localStorage.getItem('carvia_refresh_token')
         try {
-            if (refresh) await logoutUser( refresh )
+            if (refresh) await logoutUser(refresh)
         } finally {
             localStorage.removeItem('carvia_access_token')
             localStorage.removeItem('carvia_refresh_token')

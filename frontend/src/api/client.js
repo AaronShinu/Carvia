@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: '/api', 
+    baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
 })
 
 api.interceptors.request.use((config) => {
@@ -10,7 +10,7 @@ api.interceptors.request.use((config) => {
         config.headers.Authorization = `Bearer ${token}`
     }
     return config
-}) 
+})
 
 let isRefreshing = false
 let pendingRequests = []
@@ -35,34 +35,34 @@ api.interceptors.response.use(
             if (isRefreshing) {
                 return new Promise((resolve, reject) => {
                     pendingRequests.push({ resolve, reject })
-            }).then((token) => {
-                originalRequest.headers.Authorization = `Bearer ${token}`
+                }).then((token) => {
+                    originalRequest.headers.Authorization = `Bearer ${token}`
+                    return api(originalRequest)
+                })
+            }
+
+            originalRequest._retry = true
+            isRefreshing = true
+
+            const refreshToken = localStorage.getItem('carvia_refresh_token')
+
+            try {
+                const { data } = await axios.post('/api/auth/login/refresh/', { refresh: refreshToken, })
+                localStorage.setItem('carvia_access_token', data.access)
+                processQueue(null, data.access)
+                originalRequest.headers.Authorization = `Bearer ${data.access}`
                 return api(originalRequest)
-            })
+            } catch (refreshError) {
+                processQueue(refreshError, null)
+                localStorage.removeItem('carvia_access_token')
+                localStorage.removeItem('carvia_refresh_token')
+                window.location.href = '/login'
+                return Promise.reject(refreshError)
+            } finally {
+                isRefreshing = false
+            }
         }
-
-        originalRequest._retry = true
-        isRefreshing = true
-
-        const refreshToken = localStorage.getItem('carvia_refresh_token')
-
-        try {
-            const { data } = await axios.post('/api/auth/login/refresh/', { refresh: refreshToken, })
-            localStorage.setItem('carvia_access_token', data.access)
-            processQueue(null, data.access)
-            originalRequest.headers.Authorization = `Bearer ${data.access}`
-            return api(originalRequest)
-        } catch (refreshError) {
-            processQueue(refreshError, null)
-            localStorage.removeItem('carvia_access_token')
-            localStorage.removeItem('carvia_refresh_token')
-            window.location.href = '/login'
-            return Promise.reject(refreshError)
-        } finally {
-            isRefreshing = false
-        }
-    }
-    return Promise.reject(error)
-})
+        return Promise.reject(error)
+    })
 
 export default api

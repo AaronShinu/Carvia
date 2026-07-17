@@ -57,6 +57,7 @@ THIRD_PARTY_APPS = [
     'django_filters',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'storages',
 ]
 
 LOCAL_DEVELOPMENT_APPS = [
@@ -199,6 +200,6 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
-CELERY_BROKE_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
 ANTHROPIC_API_KEY = env('ANTHROPIC_API_KEY', default='')

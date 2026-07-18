@@ -14,6 +14,7 @@ import DocumentPage from './pages/DocumentPage'
 import PublicRoute from './routes/PublicRoute'
 import LandingPage from './pages/LandingPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 
 export default function App() {
   const { isLoading } = useAuth()
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password/:uid/:token" element={<ResetPasswordPage />} />
       </Route>
 
       <Route element={<ProtectedRoute />}>

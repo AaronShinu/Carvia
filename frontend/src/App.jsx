@@ -13,6 +13,7 @@ import NewEventPage from './pages/NewEventPage'
 import DocumentPage from './pages/DocumentPage'
 import PublicRoute from './routes/PublicRoute'
 import LandingPage from './pages/LandingPage'
+import ForgotPasswordPage from './pages/ForgotPasswordPage'
 
 export default function App() {
   const { isLoading } = useAuth()
@@ -32,6 +33,7 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       </Route>
 
       <Route element={<ProtectedRoute />}>

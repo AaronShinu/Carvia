@@ -5,3 +5,7 @@ export const loginUser = (data) => api.post('/auth/login/', data);
 export const fetchMe = () => api.get('/auth/me/');
 export const updateMe = (data) => api.patch('/auth/me/', data);
 export const logoutUser = () => api.post('/auth/logout/', { refresh: localStorage.getItem('carvia_refresh_token') });
+
+export const requestPasswordReset = (email) => api.post('/auth/password-reset/', { email });
+
+export const confirmPasswordReset = (uid, token, new_password) => api.post('/auth/password-reset/confirm/', { uid, token, new_password: new_password });

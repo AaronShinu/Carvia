@@ -133,3 +133,15 @@
 .auth-form .form-row-group .form-row {
     flex: 1;
 }
+
+.forgot-password-link {
+    display: inline-block;
+    margin-top: var(--space-2);
+    font-size: 0.85rem;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.forgot-password-link:hover {
+    text-decoration: underline;
+}

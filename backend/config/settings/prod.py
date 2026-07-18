@@ -24,3 +24,13 @@ AWS_QUERYSTRING_EXPIRE = 3600
 STORAGES['default'] = {
     'BACKEND': 'storages.backends.s3.S3Storage',
 }
+
+INSTALLED_APPS += ['anymail']
+
+EMAIL_BACKEND = 'anymail.backends.resend.EmailBackend'
+
+ANYMAIL = {
+    'RESEND_API_KEY': env('RESEND_API_KEY'),
+}
+
+DEFAULT_FROM_EMAIL = 'Carvia <onboarding@resend.dev>'

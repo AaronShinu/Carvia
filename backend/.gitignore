@@ -1,6 +1,13 @@
 .env
+.env.*
+!.env.example
+
 venv/
 __pycache__/
 *.pyc
 db.sqlite3
 **/__pycache__/
+
+#Local Production data backup
+carvia_backup.json
+carvia_backup_original.json
